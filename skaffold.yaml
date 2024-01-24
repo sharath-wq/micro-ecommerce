@@ -16,6 +16,22 @@ build:
               manual:
                   - src: 'src/**/*.ts'
                     dest: .
+        - image: sharathchandranp/ecomm-products
+          context: products
+          docker:
+              dockerfile: Dockerfile
+          sync:
+              manual:
+                  - src: 'src/**/*.ts'
+                    dest: .
+        - image: sharathchandranp/ecomm-cart
+          context: cart
+          docker:
+              dockerfile: Dockerfile
+          sync:
+              manual:
+                  - src: 'src/**/*.ts'
+                    dest: .
         - image: sharathchandranp/ecomm-client
           context: client
           docker:

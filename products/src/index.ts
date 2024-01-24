@@ -1,6 +1,6 @@
 import mongoose, { mongo } from 'mongoose';
 import { app } from './app';
-import { natsWrapper } from '../nats-wrapper';
+import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
     if (!process.env.JWT_KEY) {
@@ -40,7 +40,7 @@ const start = async () => {
     }
 
     app.listen(3000, () => {
-        console.log('Auth Server running on port 3000 🚀');
+        console.log('Product Server running on port 3000 🚀');
     });
 };
 

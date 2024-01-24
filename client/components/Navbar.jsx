@@ -1,12 +1,10 @@
 import Link from 'next/link';
 
 const Navbar = ({ currentUser }) => {
-    console.log(currentUser);
-
     const links = [
         !currentUser && { label: 'Signup', href: '/auth/signup' },
         !currentUser && { label: 'Signin', href: '/auth/signin' },
-        currentUser?.isAdmin && { label: 'Dashboard', href: '#' },
+        currentUser && { label: 'Sell', href: '/product/new' },
         currentUser && { label: 'Sign Out', href: '/auth/signout' },
     ]
         .filter((linkConfig) => linkConfig)
@@ -23,9 +21,11 @@ const Navbar = ({ currentUser }) => {
         });
 
     return (
-        <nav className='flex justify-between w-full bg-teal-500 p-6'>
+        <nav className='flex justify-between w-full bg-teal-500 p-6 fixed top-0'>
             <div className='flex flex-shrink-0 items-center text-white'>
-                <span className='text-xl font-semibold tracking-tight'>Ecomm</span>
+                <Link href={'/'} className='text-xl font-semibold tracking-tight cursor-pointer'>
+                    Ecomm
+                </Link>
             </div>
             <div className='flex items-center'>{links}</div>
         </nav>

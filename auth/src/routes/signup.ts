@@ -4,6 +4,8 @@ import jwt from 'jsonwebtoken';
 
 import { BadRequestError, validateRequest } from '@scmicroecom/common';
 import { User } from '../model/user';
+import { UserCreatedPublisher } from '../events/publisher/user-created-publisher';
+import { natsWrapper } from '../../nats-wrapper';
 
 const router = express.Router();
 
@@ -38,6 +40,11 @@ router.post(
         req.session = {
             jwt: userJwt,
         };
+
+        await new UserCreatedPublisher(natsWrapper.client).publish({
+            id: user.id,
+            email: user.email,
+        });
 
         res.status(201).send(user);
     }

@@ -1,12 +1,14 @@
 import '@/styles/globals.css';
 import buildClient from '@/api/build-client';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 const AppComponent = ({ Component, pageProps, currentUser }) => {
     return (
-        <div className='w-full h-screen flex flex-col justify-center items-center bg-[#f4f4f4]'>
+        <div className='w-full  flex flex-col justify-center items-center'>
             <Navbar currentUser={currentUser} />
             <Component {...pageProps} currentUser={currentUser} />
+            <Footer />
         </div>
     );
 };
