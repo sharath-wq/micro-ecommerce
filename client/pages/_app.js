@@ -3,10 +3,10 @@ import buildClient from '@/api/build-client';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
-const AppComponent = ({ Component, pageProps, currentUser }) => {
+const AppComponent = ({ Component, pageProps, currentUser, cartLength }) => {
     return (
         <div className='w-full  flex flex-col justify-center items-center'>
-            <Navbar currentUser={currentUser} />
+            <Navbar cartLength={cartLength} currentUser={currentUser} />
             <Component {...pageProps} currentUser={currentUser} />
             <Footer />
         </div>
@@ -16,6 +16,10 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
 AppComponent.getInitialProps = async (appContext) => {
     const client = buildClient(appContext.ctx);
     const { data } = await client.get('/api/users/currentuser');
+    let cartLength;
+    if (data.currentUser) {
+        cartLength = (await client.get('/api/cart')).data[0].items.length;
+    }
 
     let pageProps = {};
     if (appContext.Component.getInitialProps) {
@@ -24,6 +28,7 @@ AppComponent.getInitialProps = async (appContext) => {
 
     return {
         pageProps,
+        cartLength,
         ...data,
     };
 };
