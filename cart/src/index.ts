@@ -1,6 +1,9 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import { app } from './app';
 import { natsWrapper } from './nats-wrapper';
+import { UserCreatedListener } from './events/listeners/user-created-listener';
+import { ProductCreatedListener } from './events/listeners/product-created-listener';
+import { ProductUpdatedListener } from './events/listeners/product-updated-listener';
 
 const start = async () => {
     if (!process.env.JWT_KEY) {
@@ -32,6 +35,11 @@ const start = async () => {
         });
         process.on('SIGINT', () => natsWrapper.client.close());
         process.on('SIGTERM', () => natsWrapper.client.close());
+
+        new UserCreatedListener(natsWrapper.client).listen();
+
+        new ProductCreatedListener(natsWrapper.client).listen();
+        new ProductUpdatedListener(natsWrapper.client).listen();
 
         await mongoose.connect(process.env.MONGO_URI);
         console.log('Database Connected 💾');
