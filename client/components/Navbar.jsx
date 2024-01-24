@@ -1,9 +1,12 @@
 import Link from 'next/link';
 
 const Navbar = ({ currentUser }) => {
+    console.log(currentUser);
+
     const links = [
         !currentUser && { label: 'Signup', href: '/auth/signup' },
         !currentUser && { label: 'Signin', href: '/auth/signin' },
+        currentUser?.isAdmin && { label: 'Dashboard', href: '#' },
         currentUser && { label: 'Sign Out', href: '/auth/signout' },
     ]
         .filter((linkConfig) => linkConfig)
