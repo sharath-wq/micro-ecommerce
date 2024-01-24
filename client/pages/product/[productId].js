@@ -33,7 +33,7 @@ const ProductShow = ({ product, currentUser }) => {
                     </div>
                     <div className='flex gap-2'>
                         <button className='bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'>
-                            Buy Now
+                            Add to Cart
                         </button>
                         {product.userId === currentUser.id && (
                             <Link
