@@ -2,6 +2,8 @@ import { requireAuth, validateRequest } from '@scmicroecom/common';
 import { body } from 'express-validator';
 import express, { Request, Response } from 'express';
 import { Product } from '../models/product';
+import { ProductCreatedPublisher } from '../events/publisher/product-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -26,8 +28,14 @@ router.post(
         });
         await product.save();
 
-        // Add ticket created publisher
-
+        await new ProductCreatedPublisher(natsWrapper.client).publish({
+            id: product.id,
+            version: product.version,
+            title: product.title,
+            price: product.price,
+            userId: product.userId,
+            image: product.image,
+        });
         res.status(201).send(product);
     }
 );

@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { validateRequest, NotFoundError, requireAuth, NotAuthorizedError, BadRequestError } from '@scmicroecom/common';
 import { Product } from '../models/product';
+import { ProductUpdatedPubliser } from '../events/publisher/prodcut-updated-publiser';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -38,14 +40,14 @@ router.put(
 
         await product.save();
 
-        // Impliment ticket updated publisher
-        // new TicketUpdatedPublisher(natsWrapper.client).publish({
-        //     id: ticket.id,
-        //     version: ticket.version,
-        //     title: ticket.title,
-        //     price: ticket.price,
-        //     userId: ticket.userId,
-        // });
+        new ProductUpdatedPubliser(natsWrapper.client).publish({
+            id: product.id,
+            version: product.version,
+            title: product.title,
+            price: product.price,
+            userId: product.userId,
+            image: product.image,
+        });
 
         res.send(product);
     }
