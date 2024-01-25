@@ -1,7 +1,9 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import { app } from './app';
-import { natsWrapper } from '../nats-wrapper';
+import { natsWrapper } from './nats-wrapper';
 import { CartCreatedListener } from './events/listeners/cart-created-listener';
+import { AddedToCartListener } from './events/listeners/added-to-cart-listener';
+import { RemovedFromCartListener } from './events/listeners/removed-from-cart-listener';
 
 const start = async () => {
     if (!process.env.JWT_KEY) {
@@ -35,6 +37,8 @@ const start = async () => {
         process.on('SIGTERM', () => natsWrapper.client.close());
 
         new CartCreatedListener(natsWrapper.client).listen();
+        new AddedToCartListener(natsWrapper.client).listen();
+        new RemovedFromCartListener(natsWrapper.client).listen();
 
         await mongoose.connect(process.env.MONGO_URI);
         console.log('Database Connected 💾');
@@ -43,7 +47,7 @@ const start = async () => {
     }
 
     app.listen(3000, () => {
-        console.log('Auth Server running on port 3000 🚀');
+        console.log('Order Server running on port 3000 🚀');
     });
 };
 

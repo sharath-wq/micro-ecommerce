@@ -1,15 +1,16 @@
 import mongoose from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
-import { ProductDoc } from './product';
 
 interface CartAttrs {
+    id: string;
     userId: string;
-    products: ProductDoc[];
+    products: { id: string; price: number; title: string }[];
 }
 
 interface CartDoc extends mongoose.Document {
+    id: string;
     userId: string;
-    products: ProductDoc[];
+    products: { id: string; price: number; title: string }[];
 }
 
 interface CartModel extends mongoose.Model<CartDoc> {
@@ -24,8 +25,9 @@ const cartSchema = new mongoose.Schema(
         },
         products: [
             {
-                type: mongoose.Schema.ObjectId,
-                ref: 'Product',
+                id: { type: String },
+                price: { type: Number },
+                title: { type: String },
             },
         ],
     },
@@ -43,7 +45,11 @@ cartSchema.set('versionKey', 'version');
 cartSchema.plugin(updateIfCurrentPlugin);
 
 cartSchema.statics.build = (attrs: CartAttrs) => {
-    return new Cart(attrs);
+    return new Cart({
+        _id: attrs.id,
+        userId: attrs.userId,
+        products: attrs.products,
+    });
 };
 
 const Cart = mongoose.model<CartDoc, CartModel>('Cart', cartSchema);

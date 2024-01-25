@@ -4,7 +4,7 @@ import { Password } from '../services/password';
 interface UserAttrs {
     email: string;
     password: string;
-    isAdmin?: true;
+    cartId?: string;
 }
 
 interface UserModel extends mongoose.Model<UserDoc> {
@@ -14,7 +14,7 @@ interface UserModel extends mongoose.Model<UserDoc> {
 interface UserDoc extends mongoose.Document {
     email: string;
     password: string;
-    isAdmin?: true;
+    cartId?: string;
 }
 
 const userSchema = new mongoose.Schema(
@@ -28,9 +28,8 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        isAdmin: {
-            type: Boolean,
-            default: false,
+        cartId: {
+            type: String,
         },
     },
     {
@@ -51,9 +50,6 @@ userSchema.pre('save', async function (done) {
         this.set('password', hashed);
     }
 
-    if (this.email == 'admin@gmail.com') {
-        this.isAdmin = true;
-    }
     done();
 });
 

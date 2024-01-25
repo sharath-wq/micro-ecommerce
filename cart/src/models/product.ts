@@ -9,13 +9,12 @@ interface ProductAttrs {
     userId: string;
 }
 
-interface ProductDoc extends mongoose.Document {
+export interface ProductDoc extends mongoose.Document {
     title: string;
     price: number;
     userId: string;
     image: string;
     version: number;
-    orderId?: string;
 }
 
 interface ProductModel extends mongoose.Model<ProductDoc> {
