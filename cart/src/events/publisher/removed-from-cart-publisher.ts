@@ -1,5 +1,5 @@
-import { Publisher, Subjects, RemoveFromCart } from '@scmicroecom/common';
+import { Publisher, Subjects, RemoveFromCartEvent } from '@scmicroecom/common';
 
-export class RemovedFromCartPublisher extends Publisher<RemoveFromCart> {
+export class RemovedFromCartPublisher extends Publisher<RemoveFromCartEvent> {
     subject: Subjects.RemoveFromCart = Subjects.RemoveFromCart;
 }
