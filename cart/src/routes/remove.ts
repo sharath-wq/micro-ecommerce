@@ -1,6 +1,9 @@
 import express, { Request, Response } from 'express';
 import { Cart } from '../models/cart';
 import { NotFoundError } from '@scmicroecom/common';
+import { Product } from '../models/product';
+import { RemovedFromCartPublisher } from '../events/publisher/removed-from-cart-publisher';
+import { natsWrapper } from '../nats-wrapper';
 const router = express.Router();
 
 router.post('/api/cart/remove', async (req: Request, res: Response) => {
@@ -18,6 +21,22 @@ router.post('/api/cart/remove', async (req: Request, res: Response) => {
     cart.products = cart.products.filter((product) => product.toString() !== productId);
 
     await cart.save();
+
+    const product = await Product.findById(productId);
+
+    if (!product) {
+        throw new NotFoundError();
+    }
+
+    await new RemovedFromCartPublisher(natsWrapper.client).publish({
+        id: cart.id,
+        userId: req.currentUser!.id,
+        product: {
+            id: product.id,
+            price: product.price,
+            title: product.title,
+        },
+    });
 
     res.send(cart);
 });

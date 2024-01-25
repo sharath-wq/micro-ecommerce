@@ -53,6 +53,7 @@ const ProductShow = ({ product, currentUser }) => {
                             </Link>
                         )}
                     </div>
+                    {errors}
                 </div>
             </div>
         </div>
