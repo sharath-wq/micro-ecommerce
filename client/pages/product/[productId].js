@@ -5,17 +5,22 @@ import { useRouter } from 'next/router';
 const ProductShow = ({ product, currentUser }) => {
     const router = useRouter();
 
-    // const { doRequest, errors } = useRequest({
-    //     url: '/api/orders',
-    //     method: 'post',
-    //     body: {
-    //         ticketId: ticket.id,
-    //     },
-    //     onSuccess: (order) => {
-    //         console.log(order);
-    //         router.push(`/orders/${order.id}`);
-    //     },
-    // });
+    const { doRequest, errors } = useRequest({
+        url: '/api/cart/add',
+        method: 'post',
+        body: {
+            productId: product.id,
+        },
+        onSuccess: (product) => {
+            console.log(product);
+            router.push(`/cart`);
+        },
+    });
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        doRequest();
+    };
 
     return (
         <div className='container max-w-[600px] mx-0 my-auto mt-28'>
@@ -32,7 +37,10 @@ const ProductShow = ({ product, currentUser }) => {
                         <p className='text-gray-600 mb-6'>{product.description}</p>
                     </div>
                     <div className='flex gap-2'>
-                        <button className='bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'>
+                        <button
+                            onClick={handleClick}
+                            className='bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+                        >
                             Add to Cart
                         </button>
                         {product.userId === currentUser.id && (

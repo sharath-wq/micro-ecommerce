@@ -4,6 +4,8 @@ import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 import { NotFoundError, currentUser, errorHandler } from '@scmicroecom/common';
 import { indexCartRouter } from './routes';
+import { addCartRouter } from './routes/add';
+import { removeCartRouter } from './routes/remove';
 
 // Routers
 
@@ -20,6 +22,8 @@ app.use(
 app.use(currentUser);
 
 app.use(indexCartRouter);
+app.use(addCartRouter);
+app.use(removeCartRouter);
 
 app.all('*', async () => {
     throw new NotFoundError();

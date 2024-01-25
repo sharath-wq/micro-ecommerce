@@ -16,9 +16,10 @@ const AppComponent = ({ Component, pageProps, currentUser, cartLength }) => {
 AppComponent.getInitialProps = async (appContext) => {
     const client = buildClient(appContext.ctx);
     const { data } = await client.get('/api/users/currentuser');
-    let cartLength;
-    if (data.currentUser) {
-        cartLength = (await client.get('/api/cart')).data[0].items.length;
+    let cartLength = 0;
+
+    if (data?.currentUser) {
+        cartLength = (await client.get('/api/cart')).data.products.length;
     }
 
     let pageProps = {};

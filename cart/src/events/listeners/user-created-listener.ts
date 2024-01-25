@@ -12,7 +12,7 @@ export class UserCreatedListener extends Listener<UserCreatedEvent> {
     async onMessage(data: UserCreatedEvent['data'], msg: Message) {
         const cart = Cart.build({
             userId: data.id,
-            items: [],
+            products: [],
         });
 
         await cart.save();

@@ -1,18 +1,15 @@
 import mongoose from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
+import { ProductDoc } from './product';
 
 interface CartAttrs {
     userId: string;
-    items: {
-        product: string;
-    }[];
+    products: ProductDoc[];
 }
 
 interface CartDoc extends mongoose.Document {
     userId: string;
-    items: {
-        product: string;
-    }[];
+    products: ProductDoc[];
 }
 
 interface CartModel extends mongoose.Model<CartDoc> {
@@ -25,9 +22,10 @@ const cartSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        items: [
+        products: [
             {
-                product: String,
+                type: mongoose.Schema.ObjectId,
+                ref: 'Product',
             },
         ],
     },
