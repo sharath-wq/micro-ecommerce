@@ -3,6 +3,8 @@ import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 import { NotFoundError, currentUser, errorHandler } from '@scmicroecom/common';
+import { newOrderRouter } from './routes/new';
+import { indexOrderRouter } from './routes';
 
 // Routers
 
@@ -17,6 +19,9 @@ app.use(
 );
 
 app.use(currentUser);
+
+app.use(newOrderRouter);
+app.use(indexOrderRouter);
 
 app.all('*', async () => {
     throw new NotFoundError();
