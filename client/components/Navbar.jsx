@@ -4,6 +4,7 @@ const Navbar = ({ currentUser, cartLength }) => {
     const links = [
         !currentUser && { label: 'Signup', href: '/auth/signup' },
         !currentUser && { label: 'Signin', href: '/auth/signin' },
+        currentUser && { label: 'Orders', href: '/orders' },
         currentUser && { label: `Cart ${cartLength}`, href: '/cart' },
         currentUser && { label: 'Sell', href: '/product/new' },
         currentUser && { label: 'Sign Out', href: '/auth/signout' },

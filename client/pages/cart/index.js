@@ -1,9 +1,12 @@
+import Model from '@/components/Model';
 import useRequest from '@/hooks/use-request';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 const CartShow = ({ cartData }) => {
     const router = useRouter();
     const totalPrice = cartData.products.reduce((sum, item) => sum + item.price, 0);
+    const [isModelOpen, setIsModelOpen] = useState(false);
 
     const { doRequest, errors } = useRequest({
         url: '/api/cart/remove',
@@ -20,21 +23,25 @@ const CartShow = ({ cartData }) => {
     };
 
     return (
-        <div class='container max-w-[600px] mx-0 my-auto mt-28'>
-            <div class='max-w-2xl mx-auto bg-white shadow-md rounded p-6'>
-                <h1 class='text-3xl font-bold mb-6'>Your Cart</h1>
+        <div className='container max-w-[600px] mx-0 my-auto mt-28'>
+            <div className='max-w-2xl mx-auto bg-white shadow-md rounded p-6'>
+                <h1 className='text-3xl font-bold mb-6'>Your Cart</h1>
 
                 {cartData && cartData.products.length ? (
                     cartData.products.map((item) => (
-                        <div key={item.id} class='flex items-center mb-4'>
-                            <img src={item.image} alt='Product Image' class='w-16 h-16 object-contain mr-4 rounded-lg' />
-                            <div class='flex-1'>
-                                <h2 class='text-lg font-semibold'>{item.title}</h2>
-                                <p class='text-gray-700'>
-                                    Price: <span class='font-semibold text-teal-500'>${item.price}</span>
+                        <div key={item.id} className='flex items-center mb-4'>
+                            <img
+                                src={item.image}
+                                alt='Product Image'
+                                className='w-16 h-16 object-contain mr-4 rounded-lg'
+                            />
+                            <div className='flex-1'>
+                                <h2 className='text-lg font-semibold'>{item.title}</h2>
+                                <p className='text-gray-700'>
+                                    Price: <span className='font-semibold text-teal-500'>${item.price}</span>
                                 </p>
                             </div>
-                            <button onClick={() => onRemove(item.id)} class='ml-2 text-red-500 focus:outline-none'>
+                            <button onClick={() => onRemove(item.id)} className='ml-2 text-red-500 focus:outline-none'>
                                 Remove
                             </button>
                         </div>
@@ -44,16 +51,27 @@ const CartShow = ({ cartData }) => {
                 )}
 
                 {cartData.products.length !== 0 && (
-                    <div class='mt-8'>
-                        <p class='text-gray-700 mb-2'>
-                            Total: <span class='font-semibold text-teal-500'>${totalPrice}</span>
+                    <div className='mt-8'>
+                        <p className='text-gray-700 mb-2'>
+                            Total: <span className='font-semibold text-teal-500'>${totalPrice}</span>
                         </p>
-                        <button class='bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'>
+                        <button
+                            onClick={() => setIsModelOpen(true)}
+                            className='bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+                        >
                             Checkout
                         </button>
                     </div>
                 )}
             </div>
+            {isModelOpen && (
+                <Model
+                    cartId={cartData.id}
+                    totalPrice={totalPrice}
+                    products={cartData.products}
+                    setIsModelOpen={setIsModelOpen}
+                />
+            )}
         </div>
     );
 };

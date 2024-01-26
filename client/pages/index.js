@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { useState } from 'react';
 
 const LandingPage = ({ currentUser, products }) => {
     const truncateDescription = (text, maxChars) => {

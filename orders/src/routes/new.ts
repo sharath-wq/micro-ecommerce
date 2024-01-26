@@ -40,6 +40,9 @@ router.post(
 
         await order.save();
 
+        cart.products = [];
+        await cart.save();
+
         // Order Created Publisher
         new OrderCreatedPublisher(natsWrapper.client).publish({
             id: order.id,
